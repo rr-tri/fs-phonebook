@@ -1,14 +1,13 @@
 services:
   frontend:
-    image: app-dev
+    image: app-prod
     build:
-      context: ./frontend # The context will pick this directory as the "build context"
-      dockerfile: dev.Dockerfile # This will simply tell which dockerfile to read
+      context: ./frontend
+      dockerfile: Dockerfile
     volumes:
-      - ./frontend:/usr/src/app/app # The path can be relative, so ./ is enough to say "the same location as the docker-compose.yml"
-    # ports:
-    #   - 3000:3000
-    container_name: app # This will name the container hello-front-dev
+      - ./frontend:/usr/src/app/app
+
+    container_name: app
   mongo:
     image: mongo:4.4.16 # Cause my current system does not appear to have CPU with AVX support to have mongo:latest
     ports:
@@ -20,19 +19,19 @@ services:
     volumes:
       - ./backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
       - ./backend/mongo_data:/data/db
+    container_name: database
   backend:
-    image: server-dev
+    image: server-prod
     build:
       context: ./backend
-      dockerfile: ./dev.Dockerfile
-    # ports:
-    #   - 3003:3003
+      dockerfile: Dockerfile
     volumes:
       - ./backend:/usr/src/app
     container_name: server
     environment:
       - PORT=3003
-      - MONGO_URL=mongodb://the_username:the_password@host.docker.internal:3456/the_database
+      - MONGO_URL=mongodb://the_username:the_password@host.docker.internal:3456/phonebook
+
   nginx:
     image: nginx:1.20.1
     volumes:

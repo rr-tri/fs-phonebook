@@ -4,13 +4,10 @@ db.createUser({
     roles: [
         {
             role: 'dbOwner',
-            db: 'the_database',
+            db: 'phonebook',
         },
     ],
 });
 
-db.createCollection('phonebook');
 
-db.phonebook.insert({ text: 'Write code', done: true });
-db.phonebook.insert({ text: 'Learn about containers', done: false });
 
